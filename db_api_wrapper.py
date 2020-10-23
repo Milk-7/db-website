@@ -79,4 +79,45 @@ class DBClient:
         return True
 
     def get_planned_data(self, eva: str, date: str, hour: str) -> dict:
-        pass
+        # check if date and hour are in right format
+        if not self.check_date(date) and not self.check_hour(hour):
+            raise Exception("Wrong date/hour format, should be: date: YYMMDD, hour: HH")
+
+        request = requests.get(
+            STATION_PLAN_URL + str(eva) + f"/{date}" + f"/{hour}", headers=self.headers
+        )
+        # check if data was found
+        if request.status_code == 400:
+            return {}
+
+        soup = BeautifulSoup(request.text, "xml")
+        # in case if there were not journeys for any reason
+        if not soup.timetable:
+            return {}
+        if len(soup.find_all("s")) == 0:
+            return {}
+
+        # parse needed data into dict
+        data = {"station": {"name": soup.timetable["station"], "journeys": {}}}
+
+        for s in soup.timetable.find_all("s"):
+            station = {
+                "type": s.tl["c"],
+                "number": s.tl["n"],
+                "arrive": {
+                    "date": s.ar["pt"][0:6],
+                    "time": s.ar["pt"][6:10],
+                    "track": int(s.ar["pp"]),
+                    "path": s.ar["ppth"].split["|"],
+                },
+                "departure": {
+                    "date": s.dp["pt"][0:6],
+                    "time": s.dp["pt"][6:10],
+                    "track": int(s.dp["pp"]),
+                    "path": s.dp["ppth"].split["|"],
+                },
+            }
+
+            data["station"]["journeys"][s["id"]] = station
+
+        return data
