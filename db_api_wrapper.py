@@ -77,7 +77,7 @@ class DBClient:
     def get_planned_data(self, eva: str, date: str, hour: str) -> dict:
         # check if date and hour are in right format
         if not self.check_date(date) and not self.check_hour(hour):
-            raise Exception("Wrong date/hour format, should be: date: YYMMDD, hour: HH")
+            return {}
 
         request = requests.get(
             STATION_PLAN_URL + str(eva) + f"/{date}" + f"/{hour}", headers=self.headers
