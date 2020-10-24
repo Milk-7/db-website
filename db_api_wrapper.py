@@ -124,8 +124,73 @@ class DBClient:
         return data
 
     def get_all_known_changes(self, eva: str) -> dict:
-        request = requests.get(STATION_PLAN_URL + eva, headers=self.headers)
+        request = requests.get(STATION_ALL_CHAGNES_URL + eva, headers=self.headers)
 
         # check if data was found
         if request.status_code == 400:
             return {}
+
+        soup = BeautifulSoup(request.text, "xml")
+
+        # if there was no data
+        if not soup.timetable or len(soup.timetable.find_all("s")) == 0:
+            return {}
+
+        data = {"station": {"name": soup.timetable["station"]}, "changes": {}}
+
+        # parse needed data into dicts
+        for change in soup.timetable.find_all("s"):
+            try:
+                c = {}
+                c["arrive"] = (
+                    {"date": change.ar["ct"][0:6], "time": change.ar["ct"][6:10]}
+                    if change.ar
+                    else {}
+                )
+                c["departure"] = (
+                    {"date": change.dp["ct"][0:6], "time": change.dp["ct"][6:10]}
+                    if change.dp
+                    else {}
+                )
+                data["changes"][change["id"]] = c
+
+            except:
+                continue
+
+        return data
+
+    def get_recent_changes(self, eva: str) -> dict:
+        request = requests.get(STATION_RECENT_CHANGES_URL + eva, headers=self.headers)
+
+        # check if data was found
+        if request.status_code == 400:
+            return {}
+
+        soup = BeautifulSoup(request.text, "xml")
+
+        # if there was no data
+        if not soup.timetable or len(soup.timetable.find_all("s")) == 0:
+            return {}
+
+        data = {"station": {"name": soup.timetable["station"]}, "changes": {}}
+
+        # parse needed data into dicts
+        for change in soup.timetable.find_all("s"):
+            try:
+                c = {}
+                c["arrive"] = (
+                    {"date": change.ar["ct"][0:6], "time": change.ar["ct"][6:10]}
+                    if change.ar
+                    else {}
+                )
+                c["departure"] = (
+                    {"date": change.dp["ct"][0:6], "time": change.dp["ct"][6:10]}
+                    if change.dp
+                    else {}
+                )
+                data["changes"][change["id"]] = c
+
+            except:
+                continue
+
+        return data
