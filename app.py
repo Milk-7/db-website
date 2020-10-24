@@ -3,7 +3,7 @@ from db_api_wrapper import DBClient
 import os
 
 app = Flask(__name__)
-client = DBClient("53bb98231178bcf2492ce5f2e4edd7df")
+client = DBClient("")
 
 
 @app.route("/")

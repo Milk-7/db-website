@@ -1,0 +1,122 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.journey {
+    background-color: white;
+    height: 10em;
+    width: 97%;
+    margin-top: 4vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: normal;
+    color: rgb(63, 63, 63);
+    padding: 1vh;
+}
+
+.information {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    margin-top: 10px;
+}
+
+.arrive {
+    margin-top: 5px;
+}
+
+.app {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    padding: 3vh;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.content {
+    background-color: whitesmoke;
+    height: 100%;
+    width: 100%;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.search {
+    padding: 5px;
+    background: whitesmoke;
+    width: 100%;
+    height: 3em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#go {
+    border: none;
+    background-color: rgb(255, 197, 89);
+    border-radius: 7px;
+    width: 4em;
+    color: white;
+}
+
+#go:hover {
+    cursor: pointer;
+}
+
+input[type="text"] {
+    font-size: 20px;
+    padding: 0px 5px;
+    margin: 0px;
+    outline: none;
+    border: none;
+    height: 100%;
+}
+
+.text {
+    display: flex;
+}
+
+.hidden-hint {
+    margin: 0 4px;
+    display: flex;
+    align-items: center;
+    color: rgb(105, 105, 105);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media only screen and (max-width: 600px) {
+    .app {
+        padding: 1vh;
+    }
+
+    .search {
+        flex-direction: column;
+        justify-content: space-between;
+        height: 10em;
+    }
+
+    .text {
+        flex-direction: column;
+    }
+
+    input {
+        margin-top: 5px;
+    }
+
+    input[type="text"] {
+        margin-top: 5px;
+    }
+
+    #go {
+        width: 100%;
+        height: 2em;
+    }
+}
