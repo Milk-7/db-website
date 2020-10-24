@@ -9,12 +9,8 @@ var to_name = "";
 
 let today = new Date().toISOString().slice(0, 10).replace("-", "").substring(2).replace("-", "")
 
-function isEmpty(obj) {
-    return Object.keys(obj).length === 0;
-}
-
 async function searchButtonClick() {
-    content_container.innerHTML = "";
+    content_container.innerHTML = "Loading";
     from_changes = await fetch(`/get_recent_changes/${from_eva}`);
     to_changes = await fetch(`/get_recent_changes/${to_eva}`);
     from_plans = await fetch(`/get_plan/${from_eva}/${today}/${hour.value}`)
@@ -23,7 +19,7 @@ async function searchButtonClick() {
     var to_data = await to_plans.json()
     var from_changes_data = await from_changes.json()
     var to_changes_data = await to_changes.json()
-
+    content_container.innerHTML = "";
     for (const first in from_data.journeys) {
 
         for (const second in to_data.journeys) {
