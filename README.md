@@ -1,4 +1,4 @@
 # db-website
 A db android app (deutsche bahn) like website.
 
-#### DONE: 5%
+#### DONE: 30%

@@ -28,18 +28,15 @@ class DBClient:
     def get_stations(self, pattern: str) -> dict:
         request = requests.get(STATION_PATTERN_URL + pattern, headers=self.headers)
         soup = BeautifulSoup(request.text, "xml")
-        stations = soup.find_all("station")
 
         # check if there are any stations found
-        if len(stations) == 0:
+        if len(soup.find_all("station")) == 0:
             return {}
 
         # converte needed data into dict
-        data = {}
-        for station in stations:
-            s = {"station": {"name": station["name"], "eva": station["eva"]}}
+        station = soup.find("station")
 
-        return data
+        return {"name": station["name"], "eva": station["eva"]}
 
     @staticmethod
     def check_date(date: str) -> bool:
@@ -98,26 +95,37 @@ class DBClient:
             return {}
 
         # parse needed data into dict
-        data = {"station": {"name": soup.timetable["station"], "journeys": {}}}
+        data = {"station": {"name": soup.timetable["station"]}, "journeys": {}}
 
         for s in soup.timetable.find_all("s"):
-            station = {
-                "type": s.tl["c"],
-                "number": s.tl["n"],
-                "arrive": {
-                    "date": s.ar["pt"][0:6],
-                    "time": s.ar["pt"][6:10],
-                    "track": int(s.ar["pp"]),
-                    "path": s.ar["ppth"].split["|"],
-                },
-                "departure": {
-                    "date": s.dp["pt"][0:6],
-                    "time": s.dp["pt"][6:10],
-                    "track": int(s.dp["pp"]),
-                    "path": s.dp["ppth"].split["|"],
-                },
-            }
+            try:
+                station = {
+                    "type": s.tl["c"],
+                    "number": s.tl["n"],
+                    "arrive": {
+                        "date": s.ar["pt"][0:6],
+                        "time": s.ar["pt"][6:10],
+                        "track": int(s.ar["pp"]),
+                        "path": s.ar["ppth"].split("|"),
+                    },
+                    "departure": {
+                        "date": s.dp["pt"][0:6],
+                        "time": s.dp["pt"][6:10],
+                        "track": int(s.dp["pp"]),
+                        "path": s.dp["ppth"].split("|"),
+                    },
+                }
 
-            data["station"]["journeys"][s["id"]] = station
+                data["journeys"][s["id"]] = station
+
+            except:
+                continue
 
         return data
+
+    def get_all_known_changes(self, eva: str) -> dict:
+        request = requests.get(STATION_PLAN_URL + eva, headers=self.headers)
+
+        # check if data was found
+        if request.status_code == 400:
+            return {}
