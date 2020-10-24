@@ -1,8 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory, url_for
 from db_api_wrapper import DBClient
+import os
 
 app = Flask(__name__)
-client = DBClient("f3ad2369b93971b1a864e4c1a8ab4838")
+client = DBClient("53bb98231178bcf2492ce5f2e4edd7df")
 
 
 @app.route("/")

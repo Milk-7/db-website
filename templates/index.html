@@ -1,2 +1,78 @@
 {% extends "base.html" %}
 {% block title%} Title goes here {% endblock %}
+{% block head %}
+<script defer src="{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}
+{% block body %}
+<div class="app">
+    <div class="search">
+        <div class="text">
+            <input type="text" name="from" id="from" placeholder="from.." oninput="textChanged(event)"
+                onblur="document.getElementById('from-hint').innerText = ''">
+            <p class="hidden-hint" id="from-hint"></p>
+            <input type="text" name="to" id="to" placeholder="to.." oninput="textChanged(event)"
+                onblur="document.getElementById('to-hint').innerText = ''">
+            <p class="hidden-hint" id="to-hint"></p>
+        </div>
+        <input type="button" value="Go" id="go" onclick="searchButtonClick()">
+    </div>
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .app {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        padding: 5vh;
+    }
+
+    .search {
+        padding: 5px;
+        background: whitesmoke;
+        width: 100%;
+        height: 3em;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    #go {
+        border: none;
+        background-color: rgb(255, 197, 89);
+        border-radius: 7px;
+        width: 4em;
+        color: white;
+    }
+
+    #go:hover {
+        cursor: pointer;
+    }
+
+    input[type="text"] {
+        font-size: 20px;
+        padding: 0px 5px;
+        margin: 0px;
+        outline: none;
+        border: none;
+        height: 100%;
+    }
+
+    .text {
+        display: flex;
+    }
+
+    .hidden-hint {
+        margin: 0 4px;
+        display: flex;
+        align-items: center;
+        color: rgb(105, 105, 105);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+</style>
+{% endblock %}
