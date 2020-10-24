@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import json
 from translations import (
     ACCESS_FAIL_UNAUTHORIZED,
     STATION_PATTERN_URL,
